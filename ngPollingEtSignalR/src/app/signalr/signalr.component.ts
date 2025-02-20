@@ -12,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 @Component({
   selector: 'app-signalr',
   standalone: true,
-  imports: [MatCardContent,MatCard,MatFormField,FormsModule,MatLabel,CommonModule,MatInput,MatButtonModule],
+  imports: [MatCardContent, MatCard, MatFormField, FormsModule, MatLabel, CommonModule, MatInput, MatButtonModule],
   templateUrl: './signalr.component.html',
   styleUrls: ['./signalr.component.css']
 })
@@ -29,21 +29,27 @@ export class SignalrComponent implements OnInit {
 
   connecttohub() {
     // TODO On doit commencer par créer la connexion vers le Hub
-   
+    this.hubConnection = new signalR.HubConnectionBuilder().withUrl("https://localhost:7289/api/").build()
+
     // TODO On peut commencer à écouter pour les évènements qui vont déclencher des callbacks
-    
+    this.hubConnection!.on("TaskList", (tasks) => {
+      console.log(tasks)
+    })
     // TODO On doit ensuite se connecter
-    
+    this.hubConnection.start().then(() => {
+      console.log("Connexion fonctionnelle")
+    })
+      .catch(err => console.log("Erreur de connexion: " + err))
   }
 
   complete(id: number) {
     // TODO On invoke la méthode pour compléter une tâche sur le serveur
-   
+      this.hubConnection!.invoke("CompleteTask", id)
   }
 
   addtask() {
     // TODO On invoke la méthode pour ajouter une tâche sur le serveur
-    
+    this.hubConnection!.invoke("AddTask", this.taskname)
   }
 
 }

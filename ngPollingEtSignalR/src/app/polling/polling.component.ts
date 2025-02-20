@@ -36,7 +36,7 @@ export class PollingComponent implements OnInit {
 
   async addtask() {
     // TODO On invoke la méthode pour ajouter une tâche sur le serveur (Contrôleur d'API)
-    await lastValueFrom(this.http.post<any>(this.apiUrl + "UselessTasks/Add/" + this.taskname, null))
+    await lastValueFrom(this.http.post<any>(this.apiUrl + "UselessTasks/Add/?taskText=" + this.taskname, null))
     
 
     console.log(this.tasks);
